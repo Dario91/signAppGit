@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">signApp</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Signed!</string>
+    <string name="hello_world">Hello Signed App</string>
     <string name="action_settings">Settings</string>
 
 </resources>
