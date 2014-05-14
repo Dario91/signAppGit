@@ -4,5 +4,6 @@
     <string name="app_name">Signed!</string>
     <string name="hello_world">Hello Signed App</string>
     <string name="action_settings">Settings</string>
+    <string name="new_pic_icon">New Picture</string>
 
 </resources>

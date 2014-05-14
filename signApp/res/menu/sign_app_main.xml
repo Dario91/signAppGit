@@ -1,12 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.signapp.SignAppMain" >
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto" >
 
+    <item
+	    android:id="@+id/new_pic_icon"
+	    android:icon="@drawable/ic_action_new_attachment"
+	    android:title="@string/new_pic_icon"
+	    android:showAsAction="ifRoom"/>    
+    
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never"/>
-
+        android:showAsAction="never"/>
 </menu>
