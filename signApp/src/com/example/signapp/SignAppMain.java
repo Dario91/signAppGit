@@ -24,7 +24,7 @@ public class SignAppMain extends Activity {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.sign_actionbar, menu);
+	    inflater.inflate(R.menu.sign_app_main, menu);
 	    return super.onCreateOptionsMenu(menu);
 	}
 
