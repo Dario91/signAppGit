@@ -5,19 +5,58 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.app.*;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.*;
 import android.view.*;
-import android.widget.Toast;
+import android.widget.*;
+import android.net.*;
 import android.os.*;
+import android.provider.*;
 
 public class SignAppMain extends Activity {
 
 	private static int RESULT_LOAD_IMAGE = 1;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_sign_app_main);
-	}
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_sign_app_main);
+        
+        Button button_sign = (Button)findViewById(R.id.button_sign);
+        Button button_send = (Button)findViewById(R.id.button_send);
+        
+        button_send.setOnClickListener(new View.OnClickListener() {
+            
+           public void onClick(View v) {
+        	   sendPicture();
+           }
+       });
+    }
+     
+     
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+ 
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+ 
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+             
+            ImageView imageView = (ImageView) findViewById(R.id.imgView);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+         
+        }
+     
+     
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -30,10 +69,6 @@ public class SignAppMain extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		// Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.new_pic_icon:
 	            openPicture();
@@ -44,9 +79,6 @@ public class SignAppMain extends Activity {
 	    return true;
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
 	public static class PlaceholderFragment extends Fragment {
 
 		public PlaceholderFragment() {
@@ -62,9 +94,18 @@ public class SignAppMain extends Activity {
 	}
 	
 	public void openPicture(){
+		
 		Intent i = new Intent(
-		Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		 
 		startActivityForResult(i, RESULT_LOAD_IMAGE);
+	}
+	
+	public void sendPicture(){
+		Intent shareIntent = new Intent();
+		shareIntent.setAction(Intent.ACTION_SEND);
+		shareIntent.putExtra(Intent.EXTRA_STREAM, RESULT_LOAD_IMAGE);
+		shareIntent.setType("image/*");
+		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
 }
