@@ -7,6 +7,7 @@ import android.app.*;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.*;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import android.net.*;
@@ -14,6 +15,7 @@ import android.os.*;
 import android.provider.*;
 
 public class SignAppMain extends Activity {
+	private Uri uriData = null;
 
 	private static int RESULT_LOAD_IMAGE = 1;
 	
@@ -40,7 +42,9 @@ public class SignAppMain extends Activity {
          
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
+            uriData = selectedImage;
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Log.i("syso", MediaStore.Images.Media.DATA);
  
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
@@ -48,8 +52,8 @@ public class SignAppMain extends Activity {
  
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
+            Log.i("syso", picturePath);
             cursor.close();
-             
             ImageView imageView = (ImageView) findViewById(R.id.imgView);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
          
@@ -104,7 +108,7 @@ public class SignAppMain extends Activity {
 	public void sendPicture(){
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
-		shareIntent.putExtra(Intent.EXTRA_STREAM, RESULT_LOAD_IMAGE);
+		shareIntent.putExtra(Intent.EXTRA_STREAM, uriData);// uriData sollte als übergabe wert kommen
 		shareIntent.setType("image/*");
 		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
