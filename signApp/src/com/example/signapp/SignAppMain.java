@@ -34,8 +34,7 @@ public class SignAppMain extends Activity {
            }
        });
     }
-     
-     
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -57,9 +56,7 @@ public class SignAppMain extends Activity {
             ImageView imageView = (ImageView) findViewById(R.id.imgView);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
          
-        }
-     
-     
+        } 
     }
 
 	@Override
@@ -98,7 +95,6 @@ public class SignAppMain extends Activity {
 	}
 	
 	public void openPicture(){
-		
 		Intent i = new Intent(
 				Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		 
