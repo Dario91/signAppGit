@@ -83,6 +83,8 @@ public class SignAppMain extends Activity {
 	public static class PlaceholderFragment extends Fragment {
 
 		public PlaceholderFragment() {
+			
+			
 		}
 
 		@Override
