@@ -7,6 +7,7 @@ import android.app.*;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -30,35 +31,26 @@ public class SignAppMain extends Activity {
         button_send.setOnClickListener(new View.OnClickListener() {
             
            public void onClick(View v) {
-        	   sendPicture();
+        	   if(uriData != null){
+        		   sendPicture();
+        	   }
+        	   else {
+        		   Toast.makeText(getApplicationContext(), "Bitte wähle ein Bild aus!", 
+        				   Toast.LENGTH_SHORT).show();
+        	   }
+        	   
            }
        });
+        
+        button_sign.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				signPicture();
+			}
+		});
     }
     
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-         
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            uriData = selectedImage;
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Log.i("syso", MediaStore.Images.Media.DATA);
- 
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
- 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            Log.i("syso", picturePath);
-            cursor.close();
-            ImageView imageView = (ImageView) findViewById(R.id.imgView);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-         
-        } 
-    }
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -103,11 +95,51 @@ public class SignAppMain extends Activity {
 		startActivityForResult(i, RESULT_LOAD_IMAGE);
 	}
 	
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            uriData = selectedImage;
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Log.i("syso", MediaStore.Images.Media.DATA);
+ 
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+ 
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            Log.i("syso", picturePath);
+            cursor.close();
+            ImageView imageView = (ImageView) findViewById(R.id.imgView);
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+        } 
+    }
+	
 	public void sendPicture(){
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
+		Log.i("syso", shareIntent.getAction());
 		shareIntent.putExtra(Intent.EXTRA_STREAM, uriData);// uriData sollte als übergabe wert kommen
 		shareIntent.setType("image/*");
 		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
+	
+	public void signPicture(){
+		ImageView imageView = (ImageView) findViewById(R.id.imgView);
+		Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+		Canvas c = new Canvas(bitmap);
+		Paint p = new Paint();
+		p.setColor(Color.YELLOW);
+		p.setTextSize(12);
+		c.drawText("hello", 100, 100, p);
+		imageView.setImageBitmap(bitmap);
+		
+		
+	}
+
 }

@@ -11,4 +11,11 @@ public class SignAppMainTest extends AndroidTestCase {
 				Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		assertNotNull(i);
 	}
+	
+	public void testsendPicture() {
+		Intent shareIntent = new Intent();
+		shareIntent.setAction(Intent.ACTION_SEND);
+		
+		assertEquals(Intent.ACTION_SEND, shareIntent.getAction());
+	}
 }
