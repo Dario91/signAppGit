@@ -123,7 +123,10 @@ public class SignAppMain extends Activity {
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
 		Log.i("syso", shareIntent.getAction());
-		shareIntent.putExtra(Intent.EXTRA_STREAM, uriData);// uriData sollte als übergabe wert kommen
+		
+				
+		
+		shareIntent.putExtra(Intent.EXTRA_STREAM, ((BitmapDrawable)((ImageView) findViewById(R.id.imgView)).getDrawable()).getBitmap());// uriData sollte als übergabe wert kommen
 		shareIntent.setType("image/*");
 		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
@@ -135,13 +138,16 @@ public class SignAppMain extends Activity {
 		
 		Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 		Log.i("sign","Bitmap");
-		Canvas c = new Canvas(bitmap);
+		
+		Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		Canvas c = new Canvas(mutableBitmap);
+		
 		Paint p = new Paint();
 		p.setColor(Color.YELLOW);
 		p.setTextSize(12);
 		c.drawText("hello", 100, 100, p);
 		Log.i("sign","draw Text");
-		imageView.setImageBitmap(bitmap);
+		imageView.setImageBitmap(mutableBitmap);
 		Log.i("sign","set Bitmap");
 		
 		
