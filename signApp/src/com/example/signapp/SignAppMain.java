@@ -128,16 +128,21 @@ public class SignAppMain extends Activity {
 		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
 	
+	
 	public void signPicture(){
 		ImageView imageView = (ImageView) findViewById(R.id.imgView);
+		Log.i("sign","imageView");
+		
 		Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-
+		Log.i("sign","Bitmap");
 		Canvas c = new Canvas(bitmap);
 		Paint p = new Paint();
 		p.setColor(Color.YELLOW);
 		p.setTextSize(12);
 		c.drawText("hello", 100, 100, p);
+		Log.i("sign","draw Text");
 		imageView.setImageBitmap(bitmap);
+		Log.i("sign","set Bitmap");
 		
 		
 	}
