@@ -7,6 +7,7 @@ import android.app.*;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -40,6 +41,14 @@ public class SignAppMain extends Activity {
         	   
            }
        });
+        
+        button_sign.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				signPicture();
+			}
+		});
     }
     
 	@Override
@@ -106,7 +115,7 @@ public class SignAppMain extends Activity {
             cursor.close();
             ImageView imageView = (ImageView) findViewById(R.id.imgView);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-         
+
         } 
     }
 	
@@ -118,4 +127,19 @@ public class SignAppMain extends Activity {
 		shareIntent.setType("image/*");
 		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 	}
+	
+	public void signPicture(){
+		ImageView imageView = (ImageView) findViewById(R.id.imgView);
+		Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+
+		Canvas c = new Canvas(bitmap);
+		Paint p = new Paint();
+		p.setColor(Color.YELLOW);
+		p.setTextSize(12);
+		c.drawText("hello", 100, 100, p);
+		imageView.setImageBitmap(bitmap);
+		
+		
+	}
+
 }
