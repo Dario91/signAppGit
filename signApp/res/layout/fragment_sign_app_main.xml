@@ -6,7 +6,7 @@
     android:background="#000000">
     <ImageView
         android:id="@+id/imgView"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dip"
         android:contentDescription="@string/iv_descrip"
         android:layout_weight="1"></ImageView>

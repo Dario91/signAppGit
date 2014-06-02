@@ -1,9 +1,13 @@
 package com.example.signapp;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.app.*;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.*;
@@ -14,6 +18,8 @@ import android.widget.*;
 import android.net.*;
 import android.os.*;
 import android.provider.*;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 
 public class SignAppMain extends Activity {
 	private Uri uriData = null;
@@ -27,6 +33,26 @@ public class SignAppMain extends Activity {
         
         Button button_sign = (Button)findViewById(R.id.button_sign);
         Button button_send = (Button)findViewById(R.id.button_send);
+        
+
+        View gestureView = this.findViewById(R.id.imgView);
+        gestureView.setClickable(true);
+        gestureView.setFocusable(true);
+        
+        GestureDetector.SimpleOnGestureListener gestureListener = new Gesture();
+        final GestureDetector gd = new GestureDetector(this, gestureListener);
+        
+        gestureView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                gd.onTouchEvent(motionEvent);
+                return false;
+            }
+        });
+        
+        
+        
+        
         
         button_send.setOnClickListener(new View.OnClickListener() {
             
@@ -150,6 +176,43 @@ public class SignAppMain extends Activity {
 		Log.i("sign","set Bitmap");
 		
 		
+	}
+	
+	private void saveTempImage(){
+		
+		File path = this.getFilesDir();
+		
+		String filname =  path.getPath() + "\\file.jpg";
+		String str = "Hello World";
+		
+		FileOutputStream fo;
+		
+		try{
+			fo = openFileOutput(filname, Context.MODE_PRIVATE);
+			fo.write(str.getBytes());
+			fo.close();
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private File getTempFile(){
+		File file;
+		File path = this.getFilesDir();
+		
+		String DataName =  path.getPath() + "\\file.jpg";
+		try{
+			String fileName = Uri.parse(DataName).getLastPathSegment();
+			file = File.createTempFile(fileName, null, this.getCacheDir());
+			
+		}catch(Exception e){
+			//todo
+			file = null;
+		}
+		
+		return file;
 	}
 
 }
