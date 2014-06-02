@@ -44,7 +44,6 @@ public class SignAppMain extends Activity {
         
         button_sign.setOnClickListener(new View.OnClickListener() {
 			
-			@Override
 			public void onClick(View v) {
 				signPicture();
 			}
