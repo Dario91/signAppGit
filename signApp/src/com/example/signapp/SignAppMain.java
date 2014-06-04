@@ -3,8 +3,8 @@ package com.example.signapp;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+//import android.support.v7.app.ActionBarActivity;
+//import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.app.*;
 import android.content.Context;
@@ -56,7 +56,7 @@ public class SignAppMain extends Activity {
 					sendPicture();
 				} else {
 					Toast.makeText(getApplicationContext(),
-							"Bitte wähle ein Bild aus!", Toast.LENGTH_SHORT)
+							"Bitte wï¿½hle ein Bild aus!", Toast.LENGTH_SHORT)
 							.show();
 				}
 
@@ -149,7 +149,7 @@ public class SignAppMain extends Activity {
 		// shareIntent.putExtra(Intent.EXTRA_STREAM,
 		// ((BitmapDrawable)((ImageView)
 		// findViewById(R.id.imgView)).getDrawable()).getBitmap());// uriData
-		// sollte als übergabe wert kommen
+		// sollte als ï¿½bergabe wert kommen
 		shareIntent.putExtra(Intent.EXTRA_STREAM, uriData);
 		shareIntent.setType("image/*");
 		startActivity(Intent.createChooser(shareIntent,
