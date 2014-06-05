@@ -2,6 +2,9 @@ package com.example.signapp;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 //import android.support.v7.app.ActionBarActivity;
 //import android.support.v7.app.ActionBar;
@@ -23,6 +26,7 @@ import android.view.MotionEvent;
 
 public class SignAppMain extends Activity {
 	private Uri uriData = null;
+
 
 	private static int RESULT_LOAD_IMAGE = 1;
 
@@ -108,8 +112,7 @@ public class SignAppMain extends Activity {
 	}
 
 	public void openPicture() {
-		Intent i = new Intent(Intent.ACTION_PICK,
-				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		Log.i("Gallery", "Open Gallery!");
 
 		startActivityForResult(i, RESULT_LOAD_IMAGE);
@@ -127,8 +130,7 @@ public class SignAppMain extends Activity {
 			String[] filePathColumn = { MediaStore.Images.Media.DATA };
 			Log.i("load" + "", MediaStore.Images.Media.DATA);
 
-			Cursor cursor = getContentResolver().query(selectedImage,
-					filePathColumn, null, null, null);
+			Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
 			cursor.moveToFirst();
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -150,10 +152,9 @@ public class SignAppMain extends Activity {
 		// ((BitmapDrawable)((ImageView)
 		// findViewById(R.id.imgView)).getDrawable()).getBitmap());// uriData
 		// sollte als �bergabe wert kommen
-		shareIntent.putExtra(Intent.EXTRA_STREAM, uriData);
+		shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(getTempFile()));
 		shareIntent.setType("image/*");
-		startActivity(Intent.createChooser(shareIntent,
-				getResources().getText(R.string.send_to)));
+		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
 		Log.i("send", "Picture 'uriData' was send!");
 	}
 
@@ -176,43 +177,72 @@ public class SignAppMain extends Activity {
 		imageView.setImageBitmap(mutableBitmap);
 		Log.i("sign", "Copied Picture loaded in ImageView!");
 
+
+        saveTempImage(mutableBitmap);
+
 	}
 
-	private void saveTempImage() {
+	private void saveTempImage(Bitmap _bitmap) {
 
-		File path = this.getFilesDir();
 
-		String filname = path.getPath() + "\\file.jpg";
-		String str = "Hello World";
+		File path = this.getCacheDir();
 
-		FileOutputStream fo;
+		String filename = path.getPath()+ "/" + "file.png";
+//		String str = "Hello World";
+        File imageFile = new File(filename);
+
+		FileOutputStream outStream;
 
 		try {
-			fo = openFileOutput(filname, Context.MODE_PRIVATE);
-			fo.write(str.getBytes());
-			fo.close();
+//			fo = openFileOutput(filename, Context.MODE_PRIVATE);
+            outStream = new FileOutputStream(imageFile);
+            _bitmap.compress(Bitmap.CompressFormat.PNG, 85, outStream);
+            outStream.flush();
+            outStream.close();
+			//fo.write(str.getBytes());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+        Toast.makeText(getApplicationContext(), "Ready to be sended", Toast.LENGTH_LONG).show();
+
+
 
 	}
 
 	private File getTempFile() {
-		File file;
-		File path = this.getFilesDir();
+        File cd = this.getCacheDir();
+        File[] fileNumber = cd.listFiles();
+        String[] files  = cd.list();
 
-		String DataName = path.getPath() + "\\file.jpg";
-		try {
-			String fileName = Uri.parse(DataName).getLastPathSegment();
-			file = File.createTempFile(fileName, null, this.getCacheDir());
+        Log.i("syso", new Integer(files.length).toString());
 
-		} catch (Exception e) {
-			// todo
-			file = null;
-		}
+        File readedFile = new File(cd, cd + "/" + "file.png");
 
-		return file;
+        for(File f:fileNumber){
+            Log.i("syso",f.toString());
+            f.delete();
+
+        }
+
+
+        return readedFile;
+
+
+
+//		File file;
+//		File path = this.getFilesDir();
+//
+//		String DataName = path.getPath() + "\\file.jpg";
+//		try {
+//			String fileName = Uri.parse(DataName).getLastPathSegment();
+//			file = File.createTempFile(fileName, null, this.getCacheDir());
+//
+//		} catch (Exception e) {
+//			// todo
+//			file = null;
+//		}
+//		return file;
 	}
 
 }
