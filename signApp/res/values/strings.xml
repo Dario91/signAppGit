@@ -9,5 +9,7 @@
     <string name="button_sign">Sign</string>
     <string name="button_send">Send</string>
     <string name="send_to">Send via &#8230;</string>
+    <string name="button_ok">OK</string>
+    <string name="inserT">Please type in a Signature</string>
 
 </resources>

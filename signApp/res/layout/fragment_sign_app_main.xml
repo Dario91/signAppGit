@@ -4,10 +4,40 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#000000">
+    
+     <RelativeLayout
+        android:id="@+id/relativeSign"
+        android:layout_width="match_parent"
+        android:layout_weight="0.15"
+        android:layout_height="0dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/signText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:ems="10"
+            android:hint="@string/inserT"
+            android:textColor="#FFFFFF" />
+
+        <Button
+            android:id="@+id/button_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text="@string/button_ok" />
+        
+    </RelativeLayout>
+    
     <ImageView
         android:id="@+id/imgView"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
+        android:layout_height="0dp"
         android:contentDescription="@string/iv_descrip"
         android:layout_weight="1"></ImageView>
 

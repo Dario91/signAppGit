@@ -9,6 +9,7 @@ import java.util.ArrayList;
 //import android.support.v7.app.ActionBarActivity;
 //import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
 import android.app.*;
 import android.content.Context;
 import android.content.Intent;
@@ -23,11 +24,12 @@ import android.os.*;
 import android.provider.*;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class SignAppMain extends Activity {
 	private Uri uriData = null;
-
-
+	private String signText = null;
 	private static int RESULT_LOAD_IMAGE = 1;
 
 	@Override
@@ -46,7 +48,7 @@ public class SignAppMain extends Activity {
 		final GestureDetector gd = new GestureDetector(this, gestureListener);
 
 		gestureView.setOnTouchListener(new View.OnTouchListener() {
-			
+
 			public boolean onTouch(View view, MotionEvent motionEvent) {
 				gd.onTouchEvent(motionEvent);
 				return false;
@@ -60,8 +62,7 @@ public class SignAppMain extends Activity {
 					sendPicture();
 				} else {
 					Toast.makeText(getApplicationContext(),
-							"Bitte w�hle ein Bild aus!", Toast.LENGTH_SHORT)
-							.show();
+							"Please pick a Picture", Toast.LENGTH_SHORT).show();
 				}
 
 			}
@@ -70,7 +71,13 @@ public class SignAppMain extends Activity {
 		button_sign.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				signPicture();
+				if (uriData != null) {
+					signPicture();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Please pick a Picture", Toast.LENGTH_SHORT).show();
+				}
+
 			}
 		});
 	}
@@ -112,7 +119,8 @@ public class SignAppMain extends Activity {
 	}
 
 	public void openPicture() {
-		Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		Intent i = new Intent(Intent.ACTION_PICK,
+				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		Log.i("Gallery", "Open Gallery!");
 
 		startActivityForResult(i, RESULT_LOAD_IMAGE);
@@ -130,7 +138,8 @@ public class SignAppMain extends Activity {
 			String[] filePathColumn = { MediaStore.Images.Media.DATA };
 			Log.i("load" + "", MediaStore.Images.Media.DATA);
 
-			Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+			Cursor cursor = getContentResolver().query(selectedImage,
+					filePathColumn, null, null, null);
 			cursor.moveToFirst();
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -154,95 +163,99 @@ public class SignAppMain extends Activity {
 		// sollte als �bergabe wert kommen
 		shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(getTempFile()));
 		shareIntent.setType("image/*");
-		startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.send_to)));
+		startActivity(Intent.createChooser(shareIntent,
+				getResources().getText(R.string.send_to)));
 		Log.i("send", "Picture 'uriData' was send!");
 	}
 
 	public void signPicture() {
-		ImageView imageView = (ImageView) findViewById(R.id.imgView);
-		Log.i("sign", "imageView loaded");
 
-		Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-		Log.i("sign", "Picture loaded from ImageView");
+		final RelativeLayout signView = (RelativeLayout) findViewById(R.id.relativeSign);
 
-		Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-		Canvas c = new Canvas(mutableBitmap);
-		Log.i("sign", "Picture was copied!");
+		signView.setVisibility(View.VISIBLE);
+		final EditText signEText = (EditText) findViewById(R.id.signText);
+		final Button buttonOK = (Button) findViewById(R.id.button_ok);
 
-		Paint p = new Paint();
-		p.setColor(Color.RED);
-		p.setTextSize(40);
-		c.drawText("TEST!!!!", 100, 100, p);
-		Log.i("sign", "Draw Text on copied Picture!");
-		imageView.setImageBitmap(mutableBitmap);
-		Log.i("sign", "Copied Picture loaded in ImageView!");
+		buttonOK.setOnClickListener(new OnClickListener() {
 
+			public void onClick(View v) {
+				signText = String.valueOf(signEText.getText());
+				ImageView imageView = (ImageView) findViewById(R.id.imgView);
+				
+				Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+				Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+				Canvas c = new Canvas(mutableBitmap);
 
-        saveTempImage(mutableBitmap);
+				Paint p = new Paint();
+				p.setColor(Color.RED);
+				p.setTextSize(40);
+				c.drawText(signText, 100, 100, p);
+				
+				imageView.setImageBitmap(mutableBitmap);
+				saveTempImage(mutableBitmap);
+				signView.setVisibility(View.INVISIBLE);
+			}
+		});
 
 	}
 
 	private void saveTempImage(Bitmap _bitmap) {
 
-
 		File path = this.getCacheDir();
 
-		String filename = path.getPath()+ "/" + "file.png";
-//		String str = "Hello World";
-        File imageFile = new File(filename);
+		String filename = path.getPath() + "/" + "file.png";
+		// String str = "Hello World";
+		File imageFile = new File(filename);
+		Log.i("save", imageFile.getPath());
 
 		FileOutputStream outStream;
 
 		try {
-//			fo = openFileOutput(filename, Context.MODE_PRIVATE);
-            outStream = new FileOutputStream(imageFile);
-            _bitmap.compress(Bitmap.CompressFormat.PNG, 85, outStream);
-            outStream.flush();
-            outStream.close();
-			//fo.write(str.getBytes());
+			// fo = openFileOutput(filename, Context.MODE_PRIVATE);
+			outStream = new FileOutputStream(imageFile);
+			_bitmap.compress(Bitmap.CompressFormat.PNG, 85, outStream);
+			outStream.flush();
+			outStream.close();
+			// fo.write(str.getBytes());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        Toast.makeText(getApplicationContext(), "Ready to be sended", Toast.LENGTH_LONG).show();
-
-
+		Toast.makeText(getApplicationContext(), "Ready to be sended",
+				Toast.LENGTH_LONG).show();
 
 	}
 
 	private File getTempFile() {
-        File cd = this.getCacheDir();
-        File[] fileNumber = cd.listFiles();
-        String[] files  = cd.list();
+		File cd = this.getCacheDir();
+		File[] fileNumber = cd.listFiles();
+		String[] files = cd.list();
 
-        Log.i("syso", new Integer(files.length).toString());
+		Log.i("syso", new Integer(files.length).toString());
 
-        File readedFile = new File(cd, cd + "/" + "file.png");
+		File readedFile = new File(cd, cd + "/" + "file.png");
 
-        for(File f:fileNumber){
-            Log.i("syso",f.toString());
-            f.delete();
+		// for(File f:fileNumber){
+		// Log.i("syso",f.toString());
+		// f.delete();
+		//
+		// }
 
-        }
+		return readedFile;
 
-
-        return readedFile;
-
-
-
-//		File file;
-//		File path = this.getFilesDir();
-//
-//		String DataName = path.getPath() + "\\file.jpg";
-//		try {
-//			String fileName = Uri.parse(DataName).getLastPathSegment();
-//			file = File.createTempFile(fileName, null, this.getCacheDir());
-//
-//		} catch (Exception e) {
-//			// todo
-//			file = null;
-//		}
-//		return file;
+		// File file;
+		// File path = this.getFilesDir();
+		//
+		// String DataName = path.getPath() + "\\file.jpg";
+		// try {
+		// String fileName = Uri.parse(DataName).getLastPathSegment();
+		// file = File.createTempFile(fileName, null, this.getCacheDir());
+		//
+		// } catch (Exception e) {
+		// // todo
+		// file = null;
+		// }
+		// return file;
 	}
 
 }
