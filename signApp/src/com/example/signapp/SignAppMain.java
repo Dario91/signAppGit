@@ -207,6 +207,8 @@ public class SignAppMain extends Activity {
         Paint p = new Paint();
         p.setColor(color);
         p.setTextSize(fontSize);
+
+//TODO identify cursor location and verify position
         c.drawText(signText, 100, 100, p);
 
         imageView.setImageBitmap(mutableBitmap);

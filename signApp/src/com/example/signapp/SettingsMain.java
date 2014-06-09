@@ -43,6 +43,8 @@ public class SettingsMain extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO get Values from EditVies & Spinner
+
                 SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
                 String sql_update = "UPDATE Daten SET signText ='"+signText+"', color="+color+", fontSize= "+fontSize + " where id=1;";
                 db.execSQL(sql_update);
