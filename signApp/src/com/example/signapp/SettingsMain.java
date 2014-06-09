@@ -46,7 +46,7 @@ public class SettingsMain extends Activity {
 
                 String signText = String.valueOf(signTextEV.getText());
                 int fontSize = Integer.valueOf(String.valueOf(fontSizeEV.getText()));
-                int color = Integer.valueOf(values[((int)colorS.getSelectedItemId())]);
+                int color =0; //Integer.valueOf(values[((int)colorS.getSelectedItemId())]);
 
                 SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
                 String sql_update = "UPDATE Daten SET signText ='"+signText+"', color="+color+", fontSize= "+fontSize + " where id=1;";
