@@ -31,6 +31,8 @@ public class SignAppMain extends Activity {
 	private Uri uriData = null;
 	private String signText = null;
 	private static int RESULT_LOAD_IMAGE = 1;
+	private File filePath;
+	private String fileName = "lastSignedFile.png";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,8 @@ public class SignAppMain extends Activity {
 
 			}
 		});
+		
+		filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 	}
 
 	@Override
@@ -96,6 +100,9 @@ public class SignAppMain extends Activity {
 		switch (item.getItemId()) {
 		case R.id.new_pic_icon:
 			openPicture();
+			break;
+		case R.id.action_settings:
+			openSettings();
 			break;
 		default:
 			break;
@@ -161,11 +168,14 @@ public class SignAppMain extends Activity {
 		// ((BitmapDrawable)((ImageView)
 		// findViewById(R.id.imgView)).getDrawable()).getBitmap());// uriData
 		// sollte als �bergabe wert kommen
+		Uri x = Uri.fromFile(getTempFile());
 		shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(getTempFile()));
 		shareIntent.setType("image/*");
 		startActivity(Intent.createChooser(shareIntent,
 				getResources().getText(R.string.send_to)));
 		Log.i("send", "Picture 'uriData' was send!");
+//		File f= new File(filePath.getPath() + "/" + fileName);
+//		f.delete();
 	}
 
 	public void signPicture() {
@@ -201,9 +211,7 @@ public class SignAppMain extends Activity {
 
 	private void saveTempImage(Bitmap _bitmap) {
 
-		File path = this.getCacheDir();
-
-		String filename = path.getPath() + "/" + "file.png";
+		String filename = filePath.getPath() + "/" + fileName;
 		// String str = "Hello World";
 		File imageFile = new File(filename);
 		Log.i("save", imageFile.getPath());
@@ -227,35 +235,19 @@ public class SignAppMain extends Activity {
 	}
 
 	private File getTempFile() {
-		File cd = this.getCacheDir();
-		File[] fileNumber = cd.listFiles();
-		String[] files = cd.list();
+		File[] fileNumber = filePath.listFiles();
+		String[] files = filePath.list();
 
 		Log.i("syso", new Integer(files.length).toString());
 
-		File readedFile = new File(cd, cd + "/" + "file.png");
-
-		// for(File f:fileNumber){
-		// Log.i("syso",f.toString());
-		// f.delete();
-		//
-		// }
+		File readedFile = new File(filePath + "/" + fileName);
 
 		return readedFile;
-
-		// File file;
-		// File path = this.getFilesDir();
-		//
-		// String DataName = path.getPath() + "\\file.jpg";
-		// try {
-		// String fileName = Uri.parse(DataName).getLastPathSegment();
-		// file = File.createTempFile(fileName, null, this.getCacheDir());
-		//
-		// } catch (Exception e) {
-		// // todo
-		// file = null;
-		// }
-		// return file;
+	}
+	
+	private void openSettings() {
+		Intent i = new Intent(this, SettingsMain.class);
+		startActivityForResult(i, 0);
 	}
 
 }

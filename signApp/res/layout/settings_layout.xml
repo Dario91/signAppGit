@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textSignature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/signature"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/textTSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textSignature"
+        android:layout_below="@+id/editText01"
+        android:layout_marginTop="29dp"
+        android:text="@string/textsize"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/textColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textSignature"
+        android:layout_below="@+id/editSignature"
+        android:layout_marginTop="14dp"
+        android:text="@string/color"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF" />
+
+    <Spinner
+        android:id="@+id/spinnerColor"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#ffffff"
+        android:entries="@array/colors"
+        android:prompt="@string/spinnerTopic" />
+
+    <EditText
+        android:id="@+id/editText01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/spinnerColor"
+        android:layout_alignTop="@+id/textTSize"
+        android:ems="10"
+        android:hint="@string/inserT"
+        android:textColor="#FFFFFF" />
+    
+    <EditText
+        android:id="@+id/editSignature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/spinnerColor"
+        android:layout_alignTop="@+id/textSignature"
+        android:ems="10"
+        android:hint="@string/inserTS"
+        android:textColor="#FFFFFF" />
+
+</RelativeLayout>

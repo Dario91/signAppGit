@@ -11,5 +11,14 @@
     <string name="send_to">Send via &#8230;</string>
     <string name="button_ok">OK</string>
     <string name="inserT">Please type in a Signature</string>
-
+    <string name="inserTS">Please type in a Text Size</string>
+    <string name="spinnerTopic">Please select Color</string>
+	<string name="color">Color:</string>
+    <string name="textsize">Text Size:</string>
+    <string name="signature">Signature:</string>
+    
+    <string-array name="colors">
+        <item value="#000000">Black</item>
+        <item value="#FFFFFF">White</item>
+    </string-array>
 </resources>
