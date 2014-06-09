@@ -28,12 +28,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.database.sqlite.SQLiteDatabase;
 
-
 public class SignAppMain extends Activity {
 	private Uri uriData = null;
 	private String signText = null;
-    private int fontSize=0;
-    private int color=0;
+	private int fontSize = 0;
+	private int color = 0;
 	private static int RESULT_LOAD_IMAGE = 1;
 	private File filePath;
 	private String fileName = "lastSignedFile.png";
@@ -44,16 +43,15 @@ public class SignAppMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_sign_app_main);
 
-        if(!f.exists()) {
-            // Database
-            SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS Daten (id Integer,signText VARCHAR, fontSize Integer, color Integer);");
-            db.execSQL("INSERT INTO Daten VALUES(1,'change Me',12,0);");
-            db.close();
-        }else
-        {
-            openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
-        }
+		if (!f.exists()) {
+			// Database
+			SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
+			db.execSQL("CREATE TABLE IF NOT EXISTS Daten (id Integer,signText VARCHAR, fontSize Integer, color Integer);");
+			db.execSQL("INSERT INTO Daten VALUES(1,'change Me',12,0);");
+			db.close();
+		} else {
+			openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
+		}
 
 		Button button_sign = (Button) findViewById(R.id.button_sign);
 		Button button_send = (Button) findViewById(R.id.button_send);
@@ -98,8 +96,9 @@ public class SignAppMain extends Activity {
 
 			}
 		});
-		
-		filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+		filePath = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 	}
 
 	@Override
@@ -190,29 +189,29 @@ public class SignAppMain extends Activity {
 		startActivity(Intent.createChooser(shareIntent,
 				getResources().getText(R.string.send_to)));
 		Log.i("send", "Picture 'uriData' was send!");
-//		File f= new File(filePath.getPath() + "/" + fileName);
-//		f.delete();
+		// File f= new File(filePath.getPath() + "/" + fileName);
+		// f.delete();
 	}
 
 	public void signPicture() {
 
-        loadSettings();
+		loadSettings();
 
-        ImageView imageView = (ImageView) findViewById(R.id.imgView);
+		ImageView imageView = (ImageView) findViewById(R.id.imgView);
 
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas c = new Canvas(mutableBitmap);
+		Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+		Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		Canvas c = new Canvas(mutableBitmap);
 
-        Paint p = new Paint();
-        p.setColor(color);
-        p.setTextSize(fontSize);
+		Paint p = new Paint();
+		p.setColor(color);
+		p.setTextSize(fontSize);
 
-//TODO identify cursor location and verify position
-        c.drawText(signText, 100, 100, p);
+		// TODO identify cursor location and verify position
+		c.drawText(signText, 100, 100, p);
 
-        imageView.setImageBitmap(mutableBitmap);
-        saveTempImage(mutableBitmap);
+		imageView.setImageBitmap(mutableBitmap);
+		saveTempImage(mutableBitmap);
 
 	}
 
@@ -251,31 +250,30 @@ public class SignAppMain extends Activity {
 
 		return readedFile;
 	}
-	
+
 	private void openSettings() {
-        loadSettings();
+		loadSettings();
 
 		Intent i = new Intent(this, SettingsMain.class);
-        Bundle settings = new Bundle();
-        settings.putString("signText",signText);
-        settings.putInt("fontSize",fontSize);
-        settings.putInt("color",color);
-        i.putExtras(settings);
+		Bundle settings = new Bundle();
+		settings.putString("signText", signText);
+		settings.putInt("fontSize", fontSize);
+		settings.putInt("color", color);
+		i.putExtras(settings);
 		startActivityForResult(i, 0);
 	}
 
-    private void loadSettings()
-    {
-        SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
-        Cursor c = db.rawQuery("SELECT * FROM Daten", null);
+	private void loadSettings() {
+		SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
+		Cursor c = db.rawQuery("SELECT * FROM Daten", null);
 
-        while(c.moveToNext()) {
-            signText = c.getString(c.getColumnIndex("signText"));
-            fontSize = c.getInt(c.getColumnIndex("fontSize"));
-            color = c.getInt(c.getColumnIndex("color"));
-        }
-        c.close();
-        db.close();
-    }
+		while (c.moveToNext()) {
+			signText = c.getString(c.getColumnIndex("signText"));
+			fontSize = c.getInt(c.getColumnIndex("fontSize"));
+			color = c.getInt(c.getColumnIndex("color"));
+		}
+		c.close();
+		db.close();
+	}
 
 }
