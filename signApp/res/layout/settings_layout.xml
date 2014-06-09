@@ -2,17 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#000000"
-    android:orientation="vertical" >
+    android:background="#000000" >
 
     <TextView
         android:id="@+id/textSignature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:text="@string/signature"
         android:textSize="16sp"
         android:textColor="#FFFFFF" />
@@ -21,9 +18,8 @@
         android:id="@+id/textTSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textSignature"
-        android:layout_below="@+id/editText01"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="20dp"
         android:text="@string/textsize"
         android:textSize="16sp"
         android:textColor="#FFFFFF" />
@@ -32,9 +28,8 @@
         android:id="@+id/textColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textSignature"
-        android:layout_below="@+id/editSignature"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="20dp"
         android:text="@string/color"
         android:textSize="16sp"
         android:textColor="#FFFFFF" />
@@ -43,10 +38,9 @@
         android:id="@+id/spinnerColor"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_centerVertical="true"
         android:background="#ffffff"
         android:entries="@array/colors"
         android:prompt="@string/spinnerTopic" />
@@ -55,9 +49,12 @@
         android:id="@+id/editText01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/spinnerColor"
-        android:layout_alignTop="@+id/textTSize"
         android:ems="10"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignLeft="@id/textSignature"
+        android:layout_marginLeft="80dp"
         android:hint="@string/inserT"
         android:textColor="#FFFFFF" />
     
@@ -65,8 +62,12 @@
         android:id="@+id/editSignature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/spinnerColor"
-        android:layout_alignTop="@+id/textSignature"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignLeft="@id/textSignature"
+        android:layout_marginLeft="80dp"
+        android:layout_alignParentRight="true"
+        
         android:ems="10"
         android:hint="@string/inserTS"
         android:textColor="#FFFFFF" />
