@@ -26,10 +26,14 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.database.sqlite.SQLiteDatabase;
+
 
 public class SignAppMain extends Activity {
 	private Uri uriData = null;
 	private String signText = null;
+    private int fontSize=0;
+    private int color=0;
 	private static int RESULT_LOAD_IMAGE = 1;
 	private File filePath;
 	private String fileName = "lastSignedFile.png";
@@ -38,6 +42,19 @@ public class SignAppMain extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_sign_app_main);
+
+
+        File f = new File("MyDB.sqlite3");
+        if(!f.exists()) {
+            // Database
+            SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
+            db.execSQL("CREATE TABLE IF NOT EXISTS Daten (id Integer,signText VARCHAR, fontSize Integer, color Integer);");
+            db.execSQL("INSERT INTO TABLE Daten VALUES(1,'change Me',12,0);");
+            db.close();
+        }else
+        {
+            openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
+        }
 
 		Button button_sign = (Button) findViewById(R.id.button_sign);
 		Button button_send = (Button) findViewById(R.id.button_send);
@@ -180,32 +197,21 @@ public class SignAppMain extends Activity {
 
 	public void signPicture() {
 
-		final RelativeLayout signView = (RelativeLayout) findViewById(R.id.relativeSign);
+        loadSettings();
 
-		signView.setVisibility(View.VISIBLE);
-		final EditText signEText = (EditText) findViewById(R.id.signText);
-		final Button buttonOK = (Button) findViewById(R.id.button_ok);
+        ImageView imageView = (ImageView) findViewById(R.id.imgView);
 
-		buttonOK.setOnClickListener(new OnClickListener() {
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas c = new Canvas(mutableBitmap);
 
-			public void onClick(View v) {
-				signText = String.valueOf(signEText.getText());
-				ImageView imageView = (ImageView) findViewById(R.id.imgView);
-				
-				Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-				Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-				Canvas c = new Canvas(mutableBitmap);
+        Paint p = new Paint();
+        p.setColor(color);
+        p.setTextSize(fontSize);
+        c.drawText(signText, 100, 100, p);
 
-				Paint p = new Paint();
-				p.setColor(Color.RED);
-				p.setTextSize(40);
-				c.drawText(signText, 100, 100, p);
-				
-				imageView.setImageBitmap(mutableBitmap);
-				saveTempImage(mutableBitmap);
-				signView.setVisibility(View.INVISIBLE);
-			}
-		});
+        imageView.setImageBitmap(mutableBitmap);
+        saveTempImage(mutableBitmap);
 
 	}
 
@@ -247,7 +253,26 @@ public class SignAppMain extends Activity {
 	
 	private void openSettings() {
 		Intent i = new Intent(this, SettingsMain.class);
+        Bundle settings = new Bundle();
+        settings.putString("signText",signText);
+        settings.putInt("fontSize",fontSize);
+        settings.putInt("color",color);
+        i.putExtras(settings);
 		startActivityForResult(i, 0);
 	}
+
+    private void loadSettings()
+    {
+        SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
+        Cursor c = db.rawQuery("SELECT * FROM Daten", null);
+
+        c.moveToFirst();
+        signText = c.getString(c.getColumnIndex("signText"));
+        fontSize = c.getInt(c.getColumnIndex("fontSize"));
+        color = c.getInt(c.getColumnIndex("color"));
+
+        c.close();
+        db.close();
+    }
 
 }
