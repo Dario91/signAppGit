@@ -31,16 +31,16 @@
         <item>Turquoise</item>
     </string-array>
     <string-array name="values">
-        <item>#000000</item>
-        <item>#FFFFFF</item>
-        <item>#FF0000</item>
-        <item>#0000FF</item>
-        <item>#FFFF00</item>
-        <item>#00FF00</item>
-        <item>#FF8000</item>
-        <item>#BF00FF</item>
-        <item>#848484</item>
-        <item>#00FFFF</item>
+        <item>0</item>
+        <item>16777215</item>
+        <item>16711680</item>
+        <item>255</item>
+        <item>16776960</item>
+        <item>65280</item>
+        <item>16744448</item>
+        <item>12517631</item>
+        <item>8684676</item>
+        <item>65535</item>
     </string-array>
     
 

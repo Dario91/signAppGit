@@ -36,22 +36,23 @@ public class SignAppMain extends Activity {
 	private static int RESULT_LOAD_IMAGE = 1;
 	private File filePath;
 	private String fileName = "lastSignedFile.png";
-	private File f = new File("MyDB.sqlite3");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_sign_app_main);
-
-		if (!f.exists()) {
-			// Database
+		
+		try {
+			loadSettings();
+		}
+		catch (Exception e){
 			SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
 			db.execSQL("CREATE TABLE IF NOT EXISTS Daten (id Integer,signText VARCHAR, fontSize Integer, color Integer);");
 			db.execSQL("INSERT INTO Daten VALUES(1,'change Me',12,0);");
+			loadSettings();
 			db.close();
-		} else {
-			openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
 		}
+		
 
 		Button button_sign = (Button) findViewById(R.id.button_sign);
 		Button button_send = (Button) findViewById(R.id.button_send);
@@ -202,10 +203,16 @@ public class SignAppMain extends Activity {
 		Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 		Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 		Canvas c = new Canvas(mutableBitmap);
-
+		
+		String[]values = getResources().getStringArray(R.array.values);
+		
 		Paint p = new Paint();
-		p.setColor(color);
+		p.setColor(Integer.valueOf(values[color]));
 		p.setTextSize(fontSize);
+		
+		Log.i("sign", String.valueOf(fontSize));
+		Log.i("sign", String.valueOf(values[color]));
+		Log.i("sign", signText);
 
 		// TODO identify cursor location and verify position
 		c.drawText(signText, 100, 100, p);
@@ -214,8 +221,6 @@ public class SignAppMain extends Activity {
 		saveTempImage(mutableBitmap);
 
 	}
-
-
 
 	private void saveTempImage(Bitmap _bitmap) {
 
