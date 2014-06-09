@@ -37,19 +37,18 @@ public class SignAppMain extends Activity {
 	private static int RESULT_LOAD_IMAGE = 1;
 	private File filePath;
 	private String fileName = "lastSignedFile.png";
+	private File f = new File("MyDB.sqlite3");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_sign_app_main);
 
-
-        File f = new File("MyDB.sqlite3");
         if(!f.exists()) {
             // Database
             SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
             db.execSQL("CREATE TABLE IF NOT EXISTS Daten (id Integer,signText VARCHAR, fontSize Integer, color Integer);");
-            db.execSQL("INSERT INTO TABLE Daten VALUES(1,'change Me',12,0);");
+            db.execSQL("INSERT INTO Daten VALUES(1,'change Me',12,0);");
             db.close();
         }else
         {
