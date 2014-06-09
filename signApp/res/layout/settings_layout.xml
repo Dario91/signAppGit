@@ -41,7 +41,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
-        android:background="#ffffff"
+        android:background="#DDDDDD"
         android:entries="@array/colors"
         android:prompt="@string/spinnerTopic" />
 
@@ -71,5 +71,15 @@
         android:ems="10"
         android:hint="@string/inserTS"
         android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/spinnerColor"
+        android:layout_below="@+id/spinnerColor"
+        android:layout_marginTop="27dp"
+        android:text="@string/button_save"
+        android:background="#DDDDDD" />
 
 </RelativeLayout>

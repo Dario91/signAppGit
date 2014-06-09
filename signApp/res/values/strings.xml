@@ -10,6 +10,7 @@
     <string name="button_send">Send</string>
     <string name="send_to">Send via &#8230;</string>
     <string name="button_ok">OK</string>
+    <string name="button_save">Save</string>
     <string name="inserT">Please type in a Signature</string>
     <string name="inserTS">Please type in a Text Size</string>
     <string name="spinnerTopic">Please select Color</string>
