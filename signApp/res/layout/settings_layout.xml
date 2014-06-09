@@ -41,7 +41,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
-        android:background="#DDDDDD"
+        android:background="#FFFFFF"
         android:entries="@array/colors"
         android:prompt="@string/spinnerTopic" />
 
