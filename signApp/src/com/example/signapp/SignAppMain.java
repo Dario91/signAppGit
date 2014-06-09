@@ -251,6 +251,8 @@ public class SignAppMain extends Activity {
 	}
 	
 	private void openSettings() {
+        loadSettings();
+
 		Intent i = new Intent(this, SettingsMain.class);
         Bundle settings = new Bundle();
         settings.putString("signText",signText);
@@ -265,11 +267,11 @@ public class SignAppMain extends Activity {
         SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
         Cursor c = db.rawQuery("SELECT * FROM Daten", null);
 
-        c.moveToFirst();
-        signText = c.getString(c.getColumnIndex("signText"));
-        fontSize = c.getInt(c.getColumnIndex("fontSize"));
-        color = c.getInt(c.getColumnIndex("color"));
-
+        while(c.moveToNext()) {
+            signText = c.getString(c.getColumnIndex("signText"));
+            fontSize = c.getInt(c.getColumnIndex("fontSize"));
+            color = c.getInt(c.getColumnIndex("color"));
+        }
         c.close();
         db.close();
     }

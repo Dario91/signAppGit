@@ -44,7 +44,7 @@ public class SettingsMain extends Activity {
             @Override
             public void onClick(View view) {
                 SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
-                String sql_update = "UPDATE Daten SET signText ="+signText+" color="+color+" fontSize="+fontSize + "where id=1;";
+                String sql_update = "UPDATE Daten SET signText ='"+signText+"', color="+color+", fontSize= "+fontSize + " where id=1;";
                 db.execSQL(sql_update);
                 db.close();
             }
