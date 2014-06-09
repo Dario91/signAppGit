@@ -20,14 +20,14 @@ public class SettingsMain extends Activity {
 
         Bundle settings = getIntent().getExtras();
 
-        final EditText signText = (EditText) findViewById(R.id.editText01);
-	    signText.setText(settings.getString("signText"));
+        final EditText signTextEV = (EditText) findViewById(R.id.editText01);
+	    signTextEV.setText(settings.getString("signText"));
 
-        final EditText fontSize = (EditText) findViewById(R.id.editSignature);
-        fontSize.setText(String.valueOf(settings.getInt("fontSize")));
+        final EditText fontSizeEV = (EditText) findViewById(R.id.editSignature);
+        fontSizeEV.setText(String.valueOf(settings.getInt("fontSize")));
 
-        final Spinner color = (Spinner) findViewById(R.id.spinnerColor);
-        String[] values= getResources().getStringArray(R.array.values);
+        final Spinner colorS = (Spinner) findViewById(R.id.spinnerColor);
+        final String[] values= getResources().getStringArray(R.array.values);
         ArrayList<String> arrColors = new ArrayList<String>();
 
         for(String s : values)
@@ -35,7 +35,7 @@ public class SettingsMain extends Activity {
             arrColors.add(s);
         }
 
-        color.setSelection(arrColors.indexOf(String.valueOf(settings.getInt("color"))));
+        colorS.setSelection(arrColors.indexOf(String.valueOf(settings.getInt("color"))));
 
 
         Button save = (Button)findViewById(R.id.button_save);
@@ -43,7 +43,10 @@ public class SettingsMain extends Activity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO get Values from EditVies & Spinner
+
+                String signText = String.valueOf(signTextEV.getText());
+                int fontSize = Integer.valueOf(String.valueOf(fontSizeEV.getText()));
+                int color = Integer.valueOf(values[((int)colorS.getSelectedItemId())]);
 
                 SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
                 String sql_update = "UPDATE Daten SET signText ='"+signText+"', color="+color+", fontSize= "+fontSize + " where id=1;";
