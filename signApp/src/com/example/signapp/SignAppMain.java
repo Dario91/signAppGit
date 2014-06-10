@@ -47,6 +47,7 @@ public class SignAppMain extends Activity {
 		}
 		catch (Exception e){
 			SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
+            Log.i("syso", db.getPath());
 			db.execSQL("CREATE TABLE IF NOT EXISTS Daten (id Integer,signText VARCHAR, fontSize Integer, color Integer);");
 			db.execSQL("INSERT INTO Daten VALUES(1,'change Me',12,0);");
 			loadSettings();
@@ -250,8 +251,6 @@ public class SignAppMain extends Activity {
 	private File getTempFile() {
 		File[] fileNumber = filePath.listFiles();
 		String[] files = filePath.list();
-
-		Log.i("syso", new Integer(files.length).toString());
 
 		File readedFile = new File(filePath + "/" + fileName);
 
