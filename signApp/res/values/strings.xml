@@ -25,22 +25,22 @@
         <item>Blue</item>
         <item>Yellow</item>
         <item>Green</item>
-        <item>Orange</item><!--geht nicht-->
-        <item>Purple</item><!--geht nicht-->
+        <item>Orange</item>
+        <item>Purple</item>
         <item>Grey</item>
-        <item>Turquoise</item><!--geht nicht-->
+        <item>Turquoise</item>
     </string-array>
     <string-array name="values">
-        <item>-16777216</item>
-        <item>-1</item>
-        <item>-65536</item>
-        <item>-16776961</item>
-        <item>-256</item>
-        <item>-16711936</item>
-        <item>16744448</item><!--geht nicht-->
-        <item>12517631</item><!--geht nicht-->
-        <item>-7829368</item>
-        <item>65535</item><!--geht nicht-->
+        <item>#000000</item>
+        <item>#FFFFFF</item>
+        <item>#FF0000</item>
+        <item>#0000FF</item>
+        <item>#FFFF00</item>
+        <item>#00FF00</item>
+        <item>#FF8000</item>
+        <item>#BF00FF</item>
+        <item>#848484</item>
+        <item>#00FFFF</item>
     </string-array>
     
 

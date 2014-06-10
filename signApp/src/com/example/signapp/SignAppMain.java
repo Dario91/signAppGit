@@ -207,7 +207,7 @@ public class SignAppMain extends Activity {
 		String[]values = getResources().getStringArray(R.array.values);
 		
 		Paint p = new Paint();
-		p.setColor(Integer.valueOf(values[color]));
+		p.setColor(Color.parseColor(values[color]));
         p.setTextSize(fontSize);
 		
 		Log.i("sign", String.valueOf(fontSize));
