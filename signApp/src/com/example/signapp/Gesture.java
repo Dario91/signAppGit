@@ -7,10 +7,18 @@ import android.view.MotionEvent;
 public class Gesture extends GestureDetector.SimpleOnGestureListener {
  
     public static final String TAG = "GestureListener";
- 
+    private SignAppMain signAppMain;
+
+    public Gesture(){}
+    public Gesture(SignAppMain s)
+    {
+        signAppMain = s;
+    }
+
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         // Up motion completing a single tap occurred.
+
         Log.i(TAG, String.valueOf(e.getX()));
         Log.i(TAG, String.valueOf(e.getY()));
         Log.i(TAG, "Single Tap Up");

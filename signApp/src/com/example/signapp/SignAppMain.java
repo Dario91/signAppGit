@@ -62,7 +62,7 @@ public class SignAppMain extends Activity {
 		gestureView.setClickable(true);
 		gestureView.setFocusable(true);
 
-		GestureDetector.SimpleOnGestureListener gestureListener = new Gesture();
+		GestureDetector.SimpleOnGestureListener gestureListener = new Gesture(this);
 		final GestureDetector gd = new GestureDetector(this, gestureListener);
 
 		gestureView.setOnTouchListener(new View.OnTouchListener() {
@@ -90,7 +90,7 @@ public class SignAppMain extends Activity {
 
 			public void onClick(View v) {
 				if (uriData != null) {
-					signPicture();
+					signPicture(100,100);
 				} else {
 					Toast.makeText(getApplicationContext(),
 							"Please pick a Picture", Toast.LENGTH_SHORT).show();
@@ -195,32 +195,42 @@ public class SignAppMain extends Activity {
 		// f.delete();
 	}
 
-	public void signPicture() {
+	public void signPicture(int x, int y) {
 
-		loadSettings();
+
 
 		ImageView imageView = (ImageView) findViewById(R.id.imgView);
 
 		Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 		Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 		Canvas c = new Canvas(mutableBitmap);
-		
-		String[]values = getResources().getStringArray(R.array.values);
-		
-		Paint p = new Paint();
-		p.setColor(Color.parseColor(values[color]));
-        p.setTextSize(fontSize);
-		
-		Log.i("sign", String.valueOf(fontSize));
-		Log.i("sign", String.valueOf(values[color]));
-		Log.i("sign", signText);
 
-		// TODO identify cursor location and verify position
-		c.drawText(signText, 100, 100, p);
+        int width_distance= (imageView.getWidth()-c.getWidth()/2);
+        int height_distance = (imageView.getHeight()-c.getHeight())/2;
 
-		imageView.setImageBitmap(mutableBitmap);
-		saveTempImage(mutableBitmap);
+        // TODO test if this actually works
+        if( x > width_distance &&
+            x < imageView.getWidth()-width_distance &&
+            y > height_distance &&
+            y < imageView.getHeight() - height_distance) {
 
+            loadSettings();
+            String[] values = getResources().getStringArray(R.array.values);
+
+            Paint p = new Paint();
+            p.setColor(Color.parseColor(values[color]));
+            p.setTextSize(fontSize);
+
+            Log.i("sign", String.valueOf(fontSize));
+            Log.i("sign", String.valueOf(values[color]));
+            Log.i("sign", signText);
+
+
+            c.drawText(signText, x, y, p);
+
+            imageView.setImageBitmap(mutableBitmap);
+            saveTempImage(mutableBitmap);
+        }
 	}
 
 	private void saveTempImage(Bitmap _bitmap) {
