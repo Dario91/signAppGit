@@ -10,6 +10,7 @@ import java.util.ArrayList;
 //import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.Context;
 import android.content.Intent;
@@ -41,19 +42,17 @@ public class SignAppMain extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_sign_app_main);
-		
+
 		try {
 			loadSettings();
-		}
-		catch (Exception e){
+		} catch (Exception e) {
 			SQLiteDatabase db = openOrCreateDatabase("MyDB", MODE_PRIVATE, null);
-            Log.i("syso", db.getPath());
+			Log.i("syso", db.getPath());
 			db.execSQL("CREATE TABLE IF NOT EXISTS Daten (id Integer,signText VARCHAR, fontSize Integer, color Integer);");
 			db.execSQL("INSERT INTO Daten VALUES(1,'change Me',12,0);");
 			loadSettings();
 			db.close();
 		}
-		
 
 		Button button_sign = (Button) findViewById(R.id.button_sign);
 		Button button_send = (Button) findViewById(R.id.button_send);
@@ -62,7 +61,8 @@ public class SignAppMain extends Activity {
 		gestureView.setClickable(true);
 		gestureView.setFocusable(true);
 
-		GestureDetector.SimpleOnGestureListener gestureListener = new Gesture(this);
+		GestureDetector.SimpleOnGestureListener gestureListener = new Gesture(
+				this);
 		final GestureDetector gd = new GestureDetector(this, gestureListener);
 
 		gestureView.setOnTouchListener(new View.OnTouchListener() {
@@ -90,7 +90,7 @@ public class SignAppMain extends Activity {
 
 			public void onClick(View v) {
 				if (uriData != null) {
-					signPicture(100,100);
+					signPicture(30, 30, true);
 				} else {
 					Toast.makeText(getApplicationContext(),
 							"Please pick a Picture", Toast.LENGTH_SHORT).show();
@@ -160,7 +160,7 @@ public class SignAppMain extends Activity {
 			Uri selectedImage = data.getData();
 			uriData = selectedImage;
 			String[] filePathColumn = { MediaStore.Images.Media.DATA };
-			Log.i("load" + "", MediaStore.Images.Media.DATA);
+			Log.i("open" + "", MediaStore.Images.Media.DATA);
 
 			Cursor cursor = getContentResolver().query(selectedImage,
 					filePathColumn, null, null, null);
@@ -168,7 +168,7 @@ public class SignAppMain extends Activity {
 
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 			String picturePath = cursor.getString(columnIndex);
-			Log.i("load", picturePath);
+			Log.i("open", picturePath);
 			cursor.close();
 			ImageView imageView = (ImageView) findViewById(R.id.imgView);
 			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
@@ -177,60 +177,64 @@ public class SignAppMain extends Activity {
 	}
 
 	public void sendPicture() {
+		ImageView imageView = (ImageView) findViewById(R.id.imgView);
+		Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+		
+		saveTempImage(bitmap);
 		Intent shareIntent = new Intent();
 		shareIntent.setAction(Intent.ACTION_SEND);
-		Log.i("send", shareIntent.getAction() + "Intent SEND Loaded!");
-
-		// shareIntent.putExtra(Intent.EXTRA_STREAM,
-		// ((BitmapDrawable)((ImageView)
-		// findViewById(R.id.imgView)).getDrawable()).getBitmap());// uriData
-		// sollte als �bergabe wert kommen
 		Uri x = Uri.fromFile(getTempFile());
 		shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(getTempFile()));
 		shareIntent.setType("image/*");
 		startActivity(Intent.createChooser(shareIntent,
 				getResources().getText(R.string.send_to)));
-		Log.i("send", "Picture 'uriData' was send!");
-		// File f= new File(filePath.getPath() + "/" + fileName);
-		// f.delete();
 	}
 
-	public void signPicture(int x, int y) {
-
-
+	@SuppressLint("NewApi")
+	public void signPicture(int x, int y, boolean autoPosition) {
 
 		ImageView imageView = (ImageView) findViewById(R.id.imgView);
 
 		Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 		Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 		Canvas c = new Canvas(mutableBitmap);
+		
+		float scaleX = (float) c.getHeight() / (float) imageView.getHeight();
+		float scaleY = (float) c.getWidth() / (float) imageView.getWidth();
+		float scaling = scaleX > scaleY ? scaleX : scaleY;
+		float width_distance = ((float) imageView.getWidth() - ((float) c.getWidth() / scaling)) / 2;
+		float height_distance = ((float) imageView.getHeight() - ((float) c.getHeight() / scaling)) / 2;
+		float relativeX, relativeY;
+		
+		if(autoPosition){
+			relativeX = (float) x;
+			relativeY = (float) c.getHeight() - (float) y;
+		}
+		else{
+			relativeX = ((float) x - width_distance) * scaling;
+			relativeY = ((float) y - height_distance) * scaling;
+		}
+		
+		// TODO test if this actually works
+		if (	(x > width_distance 
+				&& x < imageView.getWidth() - width_distance
+				&& y > height_distance
+				&& y < imageView.getHeight() - height_distance) || autoPosition) {
+			loadSettings();
+			String[] values = getResources().getStringArray(R.array.values);
 
-        int width_distance= (imageView.getWidth()-c.getWidth()/2);
-        int height_distance = (imageView.getHeight()-c.getHeight())/2;
+			Paint p = new Paint();
+			p.setColor(Color.parseColor(values[color]));
+			p.setTextSize((float) fontSize * scaling);
 
-        // TODO test if this actually works
-        if( x > width_distance &&
-            x < imageView.getWidth()-width_distance &&
-            y > height_distance &&
-            y < imageView.getHeight() - height_distance) {
+			Log.i("sign", String.valueOf(fontSize));
+			Log.i("sign", String.valueOf(values[color]));
+			Log.i("sign", signText);
 
-            loadSettings();
-            String[] values = getResources().getStringArray(R.array.values);
+			c.drawText(signText, relativeX, relativeY, p);
 
-            Paint p = new Paint();
-            p.setColor(Color.parseColor(values[color]));
-            p.setTextSize(fontSize);
-
-            Log.i("sign", String.valueOf(fontSize));
-            Log.i("sign", String.valueOf(values[color]));
-            Log.i("sign", signText);
-
-
-            c.drawText(signText, x, y, p);
-
-            imageView.setImageBitmap(mutableBitmap);
-            saveTempImage(mutableBitmap);
-        }
+			imageView.setImageBitmap(mutableBitmap);
+		}
 	}
 
 	private void saveTempImage(Bitmap _bitmap) {

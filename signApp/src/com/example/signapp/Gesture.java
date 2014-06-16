@@ -18,7 +18,7 @@ public class Gesture extends GestureDetector.SimpleOnGestureListener {
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         // Up motion completing a single tap occurred.
-        signAppMain.signPicture((int)e.getX(),(int)e.getY());
+        signAppMain.signPicture((int)e.getX(),(int)e.getY(),false);
         Log.i(TAG, String.valueOf(e.getX()));
         Log.i(TAG, String.valueOf(e.getY()));
         Log.i(TAG, "Single Tap Up");

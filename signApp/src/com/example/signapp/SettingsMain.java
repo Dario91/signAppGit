@@ -50,6 +50,8 @@ public class SettingsMain extends Activity {
                 
                 Toast.makeText(getApplicationContext(), "Save Sucess!", 
                 		Toast.LENGTH_SHORT).show();
+                
+                finish();
             }
         });
 
