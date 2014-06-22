@@ -68,8 +68,14 @@ public class SignAppMain extends Activity {
 		gestureView.setOnTouchListener(new View.OnTouchListener() {
 
 			public boolean onTouch(View view, MotionEvent motionEvent) {
-				gd.onTouchEvent(motionEvent);
-				return false;
+				if (uriData!= null){
+					gd.onTouchEvent(motionEvent);
+					return false;
+				}
+				else {
+					return true;
+				}
+				
 			}
 		});
 
